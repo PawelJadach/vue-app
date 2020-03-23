@@ -37,7 +37,7 @@
             <input id="prize" v-model="prize" type="number" name="prize" min='1' placeholder="prize">
             <p v-if="errors.length">
                 <ul>
-                    <li v-for="error in errors">{{ error }}</li>
+                    <li v-bind:key="error" v-for="error in errors">{{ error }}</li> 
                 </ul>
             </p>
             <input type="submit" value="Dodaj nowy produkt">
