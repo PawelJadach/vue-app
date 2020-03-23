@@ -36,4 +36,14 @@ export class ProductsController {
             res.status(500).json({ 'error' : true });
         })
     }
+
+    static updateItem(req: express.Request, res: express.Response) {
+        return products.put('products', Number(req.params.id), req.body).then(( obj ) => {
+            if(obj['message'] === 'Bad data') res.status(400).json({ message: obj['message']});
+            else res.status(200).json({ message: 'Item update', item: obj });
+        }).catch((err) => {
+            console.error(err);
+            res.status(500).json({ 'error' : true });
+        })
+    }
 }

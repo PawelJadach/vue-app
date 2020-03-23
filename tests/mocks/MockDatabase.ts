@@ -16,13 +16,19 @@ export class MockDatabaseProvider implements IDatabaseProvider {
 
     public post(table: string, data: Object): Promise<Object> {
         return new Promise((resolve, reject) => {
-            return resolve(data || null);
+            return resolve(Object || null);
         });
     }
 
     public delete(table: string, id: Number): Promise<Object> {
         return new Promise((resolve, reject) => {
-            return resolve(id || null);
+            return resolve(Object || null);
+        });
+    }
+
+    public put(table: string, id: Number, obj: Object): Promise<Object> {
+        return new Promise((resolve, reject) => {
+            return resolve(Object || null);
         });
     }
 }

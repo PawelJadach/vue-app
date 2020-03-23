@@ -22,6 +22,7 @@ app.use(function(req: express.Request, res: express.Response, next: express.Next
 app.get('/products', ProductsController.getAllItems);
 app.post('/products', ProductsController.addNewItem);
 app.delete('/products/:id', ProductsController.deleteItem);
+app.put('/products/:id', ProductsController.updateItem);
 
 export const server = app.listen(app.get('port'), function() {
     console.log('Server started: http://localhost:' + app.get('port') + '/');

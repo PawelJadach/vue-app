@@ -7,6 +7,7 @@ export interface IDatabaseProvider {
     get(table: string) : Promise<Object>;
     post(table: string, data: Object) : Promise<Object>;
     delete(table: string, id: Number) : Promise<Object>;
+    put(table: string, id: Number, obj: Object) : Promise<Object>;
 }
 
 export class DatabaseProvider implements IDatabaseProvider {
@@ -57,6 +58,28 @@ export class DatabaseProvider implements IDatabaseProvider {
                       return resolve(deletedItem || null);
                   })
                   return resolve(deletedItem || null);
+            });
+        });
+    }
+
+    public put(table: string, id: Number, obj: Object): Promise<Object> {
+        return new Promise((resolve, reject) => {
+           fs.readFile(DB_FILE, (err, data) => {
+                if (err) {
+                   reject(err);
+                }
+
+                if(obj.hasOwnProperty('name') && obj['name'].length > 0 && obj.hasOwnProperty('url') && obj['url'].length > 0 && obj.hasOwnProperty('prize') && obj['prize'].length > 0){
+                    let newData = JSON.parse(data);
+                    const editedItemIndex = newData[table].findIndex(product => product.id === id);
+                    newData[table][editedItemIndex] = obj;
+                    newData[table][editedItemIndex]['id'] = id;
+                    fs.writeFileSync('database.json', JSON.stringify(newData), (err) => {
+                        if (err) throw err;
+                    })
+                    return resolve(newData[table][editedItemIndex])
+                }
+                else return resolve({ message: 'Bad data'})     
             });
         });
     }
