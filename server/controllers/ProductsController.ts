@@ -21,7 +21,16 @@ export class ProductsController {
 
     static addNewItem(req: express.Request, res: express.Response) {
         return products.post('products', req.body).then(( obj: IProduct) => {
-            res.status(200).json({ message:'Item added', item: obj });
+            res.status(200).json({ message: 'Item added', item: obj });
+        }).catch((err) => {
+            console.error(err);
+            res.status(500).json({ 'error' : true });
+        })
+    }
+
+    static deleteItem(req: express.Request, res: express.Response) {
+        return products.delete('products', Number(req.params.id)).then(( obj: IProduct) => {
+            res.status(200).json({ message: 'Item deleted', item: obj });
         }).catch((err) => {
             console.error(err);
             res.status(500).json({ 'error' : true });

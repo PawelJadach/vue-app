@@ -19,4 +19,10 @@ export class MockDatabaseProvider implements IDatabaseProvider {
             return resolve(data || null);
         });
     }
+
+    public delete(table: string, id: Number): Promise<Object> {
+        return new Promise((resolve, reject) => {
+            return resolve(id || null);
+        });
+    }
 }
