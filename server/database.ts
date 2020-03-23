@@ -31,14 +31,18 @@ export class DatabaseProvider implements IDatabaseProvider {
                 if (err) {
                    reject(err);
                 }
-                const newData = JSON.parse(data);
-                obj['id'] = newData[table].length + 1
-                newData[table].push(obj)
-                fs.writeFileSync('database.json', JSON.stringify(newData), (err) => {
-                      if (err) throw err;
-                      return resolve(obj || null);
-                  })
-                  return resolve(obj || null);
+
+                if(obj.hasOwnProperty('name') && obj['name'].length > 0 && obj.hasOwnProperty('url') && obj['url'].length > 0 && obj.hasOwnProperty('prize') && obj['prize'].length > 0){
+                    const newData = JSON.parse(data);
+                    obj['id'] = newData[table].length + 1
+                    newData[table].push(obj)
+                    fs.writeFileSync('database.json', JSON.stringify(newData), (err) => {
+                        if (err) throw err;
+                        return resolve(obj || null);
+                    })
+                    return resolve(obj || null);
+                    } 
+                else return resolve({ message: 'Bad data'})   
             });
         });
     }
@@ -51,13 +55,14 @@ export class DatabaseProvider implements IDatabaseProvider {
                 }
                 const newData = JSON.parse(data);
                 const deletedItemIndex = newData[table].findIndex(product => product.id === id);
+                if(deletedItemIndex < 0) return resolve({ message: 'Not found'});
                 const deletedItem = newData[table][deletedItemIndex];
                 newData[table].splice(deletedItemIndex, 1);
                 fs.writeFileSync('database.json', JSON.stringify(newData), (err) => {
                       if (err) throw err;
                       return resolve(deletedItem || null);
                   })
-                  return resolve(deletedItem || null);
+                return resolve(deletedItem || null);
             });
         });
     }
@@ -72,6 +77,7 @@ export class DatabaseProvider implements IDatabaseProvider {
                 if(obj.hasOwnProperty('name') && obj['name'].length > 0 && obj.hasOwnProperty('url') && obj['url'].length > 0 && obj.hasOwnProperty('prize') && obj['prize'].length > 0){
                     let newData = JSON.parse(data);
                     const editedItemIndex = newData[table].findIndex(product => product.id === id);
+                    if(editedItemIndex < 0) return resolve({ message: 'Not found'});
                     newData[table][editedItemIndex] = obj;
                     newData[table][editedItemIndex]['id'] = id;
                     fs.writeFileSync('database.json', JSON.stringify(newData), (err) => {

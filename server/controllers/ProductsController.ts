@@ -20,8 +20,9 @@ export class ProductsController {
     }
 
     static addNewItem(req: express.Request, res: express.Response) {
-        return products.post('products', req.body).then(( obj: IProduct) => {
-            res.status(200).json({ message: 'Item added', item: obj });
+        return products.post('products', req.body).then((obj) => {
+            if(obj.hasOwnProperty('message')) res.status(400).json({ message: obj['message']});
+            res.status(201).json({ message: 'Created', item: obj });
         }).catch((err) => {
             console.error(err);
             res.status(500).json({ 'error' : true });
@@ -29,8 +30,9 @@ export class ProductsController {
     }
 
     static deleteItem(req: express.Request, res: express.Response) {
-        return products.delete('products', Number(req.params.id)).then(( obj: IProduct) => {
-            res.status(200).json({ message: 'Item deleted', item: obj });
+        return products.delete('products', Number(req.params.id)).then((obj) => {
+            if(obj.hasOwnProperty('message')) res.status(400).json({ message: obj['message']});
+            else res.status(200).json({ message: 'Deleted', item: obj });
         }).catch((err) => {
             console.error(err);
             res.status(500).json({ 'error' : true });
@@ -38,9 +40,9 @@ export class ProductsController {
     }
 
     static updateItem(req: express.Request, res: express.Response) {
-        return products.put('products', Number(req.params.id), req.body).then(( obj ) => {
-            if(obj['message'] === 'Bad data') res.status(400).json({ message: obj['message']});
-            else res.status(200).json({ message: 'Item update', item: obj });
+        return products.put('products', Number(req.params.id), req.body).then((obj) => {
+            if(obj.hasOwnProperty('message')) res.status(400).json({ message: obj['message']});
+            else res.status(200).json({ message: 'Updated', item: obj });
         }).catch((err) => {
             console.error(err);
             res.status(500).json({ 'error' : true });
